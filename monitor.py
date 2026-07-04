@@ -99,7 +99,7 @@ for title in titles:
         if title not in seen:
             new_items.append(title)
             seen.append(title)
-send_message("✅ TVGFBF takip sistemi başarıyla çalışıyor.")
+
 if new_items:
     message = "🚨 TVGFBF'de yeni duyuru bulundu:\n\n"
 
