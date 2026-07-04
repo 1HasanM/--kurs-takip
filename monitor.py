@@ -75,14 +75,26 @@ if html is None:
 
 soup = BeautifulSoup(html, "html.parser")
 
-titles = []
+announcements = []
 
-for tag in soup.find_all(["a", "h1", "h2", "h3", "h4"]):
-    text = tag.get_text(strip=True)
-    if text and len(text) > 5:
-        titles.append(text)
+for a in soup.find_all("a", href=True):
+    title = a.get_text(strip=True)
+    href = a["href"]
 
-titles = list(set(titles))
+    if not title or len(title) < 5:
+        continue
+
+    lower = title.lower()
+
+    if any(k in lower for k in KEYWORDS):
+
+        if href.startswith("/"):
+            href = "https://tvgfbf.gov.tr" + href
+
+        announcements.append({
+            "title": title,
+            "url": href
+        })
 
 try:
     with open("seen.json", "r", encoding="utf-8") as f:
@@ -92,21 +104,17 @@ except:
 
 new_items = []
 
-for title in titles:
-    lower = title.lower()
-
-    if any(keyword in lower for keyword in KEYWORDS):
-        if title not in seen:
-            new_items.append(title)
-            seen.append(title)
+for item in announcements:
+    if item["url"] not in seen:
+        new_items.append(item)
+        seen.append(item["url"])
 
 if new_items:
     message = "🚨 TVGFBF'de yeni duyuru bulundu:\n\n"
 
     for item in new_items:
-        message += f"• {item}\n"
-
-    message += f"\n{URL}"
+        message += f"• {item['title']}\n"
+        message += f"{item['url']}\n\n"
 
     send_message(message)
     print("Telegram bildirimi gönderildi.")
