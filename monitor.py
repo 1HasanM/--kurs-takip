@@ -27,7 +27,7 @@ HEADERS = {
 
 def send_message(message):
     try:
-        requests.post(
+        r = requests.post(
             f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
             data={
                 "chat_id": CHAT_ID,
@@ -35,8 +35,14 @@ def send_message(message):
             },
             timeout=30
         )
+
+        print("BOT TOKEN:", BOT_TOKEN[:10] + "...")
+        print("CHAT ID:", CHAT_ID)
+        print("STATUS:", r.status_code)
+        print("RESPONSE:", r.text)
+
     except Exception as e:
-        print(f"Telegram gönderim hatası: {e}")
+        print("Telegram gönderim hatası:", e)
 
 
 def get_page():
