@@ -36,10 +36,7 @@ def send_message(message):
             timeout=30
         )
 
-        print("BOT TOKEN:", BOT_TOKEN[:10] + "...")
-        print("CHAT ID:", CHAT_ID)
-        print("STATUS:", r.status_code)
-        print("RESPONSE:", r.text)
+        
 
     except Exception as e:
         print("Telegram gönderim hatası:", e)
